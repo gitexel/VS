@@ -1,0 +1,44 @@
+{
+  "name": "SAPS",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start",
+    "test": "jest",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "expo": "^35.0.1",
+    "moment": "^2.24.0",
+    "native-base": "^2.13.8",
+    "prop-types": "latest",
+    "react": "^16.12.0",
+    "react-base": "^0.2.0",
+    "react-native": "^0.61.5",
+    "react-native-button": "^2.4.0",
+    "react-native-elements": "^1.2.7",
+    "react-native-gesture-handler": "^1.5.2",
+    "react-native-maps": "^0.26.1",
+    "react-native-reanimated": "^1.4.0",
+    "react-navigation": "^4.0.10",
+    "react-navigation-drawer": "^2.3.3",
+    "react-navigation-stack": "^1.10.3",
+    "react-native-vector-icons": "^6.6.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.4",
+    "@babel/runtime": "^7.7.4",
+    "@react-native-community/eslint-config": "^0.0.5",
+    "babel-jest": "^24.9.0",
+    "eslint": "^6.7.2",
+    "jest": "^24.9.0",
+    "metro-react-native-babel-preset": "^0.57.0",
+    "react-devtools": "^4.2.1",
+    "react-test-renderer": "16.9.0"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}
