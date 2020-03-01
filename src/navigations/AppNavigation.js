@@ -2,7 +2,7 @@ import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import {createDrawerNavigator} from 'react-navigation-drawer';
 
-import HomeScreen from '../screens/Home/homeScreen';
+import Hub from '../screens/Hub/Hub';
 import LoginScreen from '../screens/Login/login';
 import WelcomeScreen from '../screens/Welcome/welcome';
 import SignUpScreen from '../screens/SignUp/signUp';
@@ -13,7 +13,7 @@ const MainNavigator = createStackNavigator(
     Welcome: {screen: WelcomeScreen},
     Login: {screen: LoginScreen},
     SignUp: {screen: SignUpScreen},
-    Home: {screen: HomeScreen},
+    Hub: {screen: Hub},
   },
   {
     initialRouteName: 'Welcome',

@@ -15,7 +15,7 @@ class LoginScreen extends React.Component {
   }
 
   _onPressLoginButton = () => {
-    this.props.navigation.navigate('Home');
+    this.props.navigation.navigate('Hub');
   };
 
   render() {
