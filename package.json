@@ -10,6 +10,9 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-native-firebase/app": "^6.3.4",
+    "@react-native-firebase/auth": "^6.3.4",
+    "@react-native-firebase/database": "^6.3.4",
     "expo": "^35.0.1",
     "moment": "^2.24.0",
     "native-base": "^2.13.8",
@@ -22,10 +25,10 @@
     "react-native-gesture-handler": "^1.5.2",
     "react-native-maps": "^0.26.1",
     "react-native-reanimated": "^1.4.0",
+    "react-native-vector-icons": "^6.6.0",
     "react-navigation": "^4.0.10",
-    "react-navigation-drawer": "^2.3.3",
-    "react-navigation-stack": "^1.10.3",
-    "react-native-vector-icons": "^6.6.0"
+    "react-navigation-drawer": "^2.4.2",
+    "react-navigation-stack": "^1.10.3"
   },
   "devDependencies": {
     "@babel/core": "^7.7.4",

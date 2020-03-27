@@ -1,6 +1,7 @@
 import React from 'react';
 import {TextInput, View, Text} from 'react-native';
 import Button from 'react-native-button';
+import auth from '@react-native-firebase/auth';
 
 import styles from './styles';
 import {AppStyles} from '../../AppStyles';
@@ -9,19 +10,35 @@ class LoginScreen extends React.Component {
   static navigationOptions = {
     title: '',
   };
+
   constructor(props) {
     super(props);
-    this.state = {username: '', password: '', loading: false};
+    this.state = {
+      username: '',
+      password: '',
+      loading: false,
+      errorMessage: null,
+    };
   }
 
   _onPressLoginButton = () => {
-    this.props.navigation.navigate('Hub');
+    auth()
+      .signInWithEmailAndPassword(this.state.username, this.state.password)
+      .then(() => this.props.navigation.navigate('Hub'))
+      .catch(error => {
+        this.setState({errorMessage: error.message});
+      });
   };
 
   render() {
     return (
       <View style={styles.container}>
-        <Text style={[styles.title, styles.leftTitle]}> Sign In </Text>
+        <Text style={[styles.title, styles.leftTitle]}>Sign In</Text>
+        {this.state.errorMessage && (
+          <Text style={{color: 'red', fontSize: 10}}>
+            {this.state.errorMessage}
+          </Text>
+        )}
         <View style={styles.InputContainer}>
           <TextInput
             style={styles.body}
@@ -44,7 +61,7 @@ class LoginScreen extends React.Component {
         <Button
           containerStyle={styles.loginContainer}
           style={styles.loginText}
-          onPress={() => this._onPressLoginButton()}>
+          onPress={this._onPressLoginButton}>
           Sign In
         </Button>
       </View>

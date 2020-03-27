@@ -1,12 +1,10 @@
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
-import {createDrawerNavigator} from 'react-navigation-drawer';
 
 import Hub from '../screens/Hub/Hub';
 import LoginScreen from '../screens/Login/login';
 import WelcomeScreen from '../screens/Welcome/welcome';
 import SignUpScreen from '../screens/SignUp/signUp';
-import DrawerContainer from '../screens/DrawerContainer/drawerContainer';
 
 const MainNavigator = createStackNavigator(
   {
@@ -16,7 +14,7 @@ const MainNavigator = createStackNavigator(
     Hub: {screen: Hub},
   },
   {
-    initialRouteName: 'Welcome',
+    initialRouteName: 'Hub',
     headerMode: 'float',
     defaultNavigationOptions: ({navigation}) => ({
       headerTitleStyle: {

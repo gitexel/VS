@@ -26,17 +26,12 @@ export default class Hub extends React.Component {
     title: '',
     header: null,
   };
-  onRegionChange(region) {
-    this.setState({region});
-  }
+
 
   constructor(props) {
     super(props);
     this.state = {
-      region: {
-        latitude: 3,
-        longitude: 4,
-      },
+
       selectedTab: 'home',
     };
   }
@@ -53,7 +48,6 @@ export default class Hub extends React.Component {
       default:
     }
   }
-  onPressFindCar = () => {};
 
   render() {
     return (
