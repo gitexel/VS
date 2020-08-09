@@ -6,7 +6,7 @@ import styles from '../Welcome/styles';
 
 class WelcomeScreen extends React.Component {
   static navigationOptions = {
-    header: null,
+    headerShown: false,
     title: 'Welcome',
   };
   constructor(props) {

@@ -1,4 +1,10 @@
 {
   "name": "SAPS",
-  "displayName": "SAPS"
+  "displayName": "SAPS",
+  "expo": {
+    "sdkVersion": "38.0.0",
+    "name": "SAPS",
+    "description": "",
+    "slug": "saps"
+  }
 }

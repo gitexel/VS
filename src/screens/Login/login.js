@@ -5,6 +5,7 @@ import auth from '@react-native-firebase/auth';
 
 import styles from './styles';
 import {AppStyles} from '../../AppStyles';
+import firestore from '@react-native-firebase/firestore';
 
 class LoginScreen extends React.Component {
   static navigationOptions = {
@@ -21,11 +22,35 @@ class LoginScreen extends React.Component {
     };
   }
 
+  _onSucssesLogin = () => {
+    let user_uid = auth().currentUser.uid;
+    let vehicle_id = '';
+    firestore()
+      .collection('users')
+      .doc(user_uid)
+      .get()
+      .then(function (doc) {
+        if (doc.exists) {
+          console.log('Document data:', doc.data());
+          vehicle_id = doc.data().car.id;
+        } else {
+          // doc.data() will be undefined in this case
+          console.log('No such document!');
+        }
+      })
+      .catch(function (error) {
+        console.log('Error getting document:', error);
+      });
+    this.props.navigation.navigate('Hub', {
+      user_uid: user_uid,
+      vehicle_id: vehicle_id,
+    });
+  };
   _onPressLoginButton = () => {
     auth()
       .signInWithEmailAndPassword(this.state.username, this.state.password)
-      .then(() => this.props.navigation.navigate('Hub'))
-      .catch(error => {
+      .then(() => this._onSucssesLogin())
+      .catch((error) => {
         this.setState({errorMessage: error.message});
       });
   };
@@ -43,7 +68,7 @@ class LoginScreen extends React.Component {
           <TextInput
             style={styles.body}
             placeholder="Type username"
-            onChangeText={username => this.setState({username})}
+            onChangeText={(username) => this.setState({username})}
             value={this.state.username}
             placeholderTextColor={AppStyles.color.grey}
             underlineColorAndroid="transparent"
@@ -54,7 +79,7 @@ class LoginScreen extends React.Component {
             secureTextEntry={true}
             style={styles.body}
             placeholder="Type password"
-            onChangeText={password => this.setState({password})}
+            onChangeText={(password) => this.setState({password})}
             value={this.state.password}
           />
         </View>

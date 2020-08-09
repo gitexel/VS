@@ -5,6 +5,7 @@ import Hub from '../screens/Hub/Hub';
 import LoginScreen from '../screens/Login/login';
 import WelcomeScreen from '../screens/Welcome/welcome';
 import SignUpScreen from '../screens/SignUp/signUp';
+import VehicleTabSettings from '../screens/Hub/vehicleSettingsTab';
 
 const MainNavigator = createStackNavigator(
   {
@@ -12,10 +13,11 @@ const MainNavigator = createStackNavigator(
     Login: {screen: LoginScreen},
     SignUp: {screen: SignUpScreen},
     Hub: {screen: Hub},
+    carSettings: {screen: VehicleTabSettings},
   },
   {
     initialRouteName: 'Hub',
-    headerMode: 'float',
+    headerMode: 'flat',
     defaultNavigationOptions: ({navigation}) => ({
       headerTitleStyle: {
         fontWeight: 'bold',

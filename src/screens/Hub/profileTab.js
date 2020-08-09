@@ -2,22 +2,32 @@ import React from 'react';
 
 import {
   Content,
-  Item,
+  ListItem,
   Input,
   Icon,
   Text,
   Picker,
-  Label,
-  Form,
+  Left,
+  Body,
+  Button,
 } from 'native-base';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 class ProfileTab extends React.Component {
   constructor(props) {
+    const {currentUser} = auth();
     super(props);
     this.state = {
+      currentUser,
+
       isLoading: false,
-      selectedItem: undefined,
-      selected1: 'key0',
+      first_name: '',
+      last_name: '',
+      phone: '',
+      gender: '',
+      address: '',
+      password: '0000000000000',
       results: {
         items: [],
       },
@@ -25,10 +35,47 @@ class ProfileTab extends React.Component {
     // this.tryToLoginFirst();
   }
 
-  onValueChange(value: string) {
-    this.setState({
-      selected1: value,
-    });
+  componentDidMount() {
+    firestore()
+      .collection('users')
+      .doc(this.state.currentUser.uid)
+      .get()
+      .then(
+        function (doc) {
+          if (doc.exists) {
+            console.log('Document data:', doc.data());
+            this.setState({first_name: doc.data().personal.first_name});
+            this.setState({last_name: doc.data().personal.last_name});
+            this.setState({phone: doc.data().personal.phone});
+            this.setState({gender: doc.data().personal.gender});
+            this.setState({address: doc.data().personal.address});
+            this.setState({vehicle_id: doc.data().car.id});
+          } else {
+            console.log('No such document!');
+          }
+        }.bind(this),
+      )
+      .catch(function (error) {
+        console.log('Error getting document:', error);
+      });
+  }
+  componentWillUnmount() {
+    firestore()
+      .collection('users')
+      .doc(this.state.currentUser.uid)
+      .update({
+        personal: {
+          first_name: this.state.first_name,
+          last_name: this.state.last_name,
+          phone: this.state.phone,
+          gender: this.state.gender,
+          address: this.state.address,
+          password: this.state.password,
+        },
+      })
+      .then(() => {
+        console.log('User updated!');
+      });
   }
 
   render() {
@@ -37,48 +84,111 @@ class ProfileTab extends React.Component {
     }
     return (
       <Content>
-        <Form>
-          <Item inlineLabel>
-            <Label>First Name</Label>
-            <Input />
-          </Item>
-          <Item inlineLabel>
-            <Label>Last Name</Label>
-            <Input />
-          </Item>
+        <ListItem icon>
+          <Left>
+            <Text>First Name</Text>
+          </Left>
+          <Body>
+            <Input
+              value={this.state.first_name}
+              onChangeText={(text) => this.setState({first_name: text})}
+            />
+          </Body>
+        </ListItem>
 
-          <Item>
-            <Icon active name="mail" />
-            <Input placeholder="EMAIL" />
-          </Item>
-          <Item>
-            <Icon active name="unlock" />
-            <Input placeholder="PASSWORD" secureTextEntry />
-          </Item>
-          <Item>
-            <Icon active name="call" />
-            <Input placeholder="PHONE" keyboardType="numeric" />
-          </Item>
+        <ListItem icon>
+          <Left>
+            <Text>Last Name</Text>
+          </Left>
+          <Body>
+            <Input
+              value={this.state.last_name}
+              onChangeText={(text) => this.setState({last_name: text})}
+            />
+          </Body>
+        </ListItem>
 
-          <Item iconLeft>
-            <Icon active name="transgender" />
-            <Text>GENDER</Text>
+        <ListItem icon>
+          <Left>
+            <Button>
+              <Icon name="mail" />
+            </Button>
+          </Left>
+          <Body>
+            <Input
+              disabled
+              placeholder="Email"
+              value={this.state.currentUser.email}
+            />
+          </Body>
+        </ListItem>
+        <ListItem icon>
+          <Left>
+            <Button>
+              <Icon
+                active
+                type={'MaterialCommunityIcons'}
+                name="form-textbox-password"
+              />
+            </Button>
+          </Left>
+          <Body>
+            <Input
+              placeholder="PASSWORD"
+              secureTextEntry
+              value={this.state.password}
+              onChangeText={(text) => this.setState({password: text})}
+            />
+          </Body>
+        </ListItem>
+        <ListItem icon>
+          <Left>
+            <Button>
+              <Icon active name="call" />
+            </Button>
+          </Left>
+          <Body>
+            <Input
+              placeholder="PHONE"
+              keyboardType="numeric"
+              value={this.state.phone}
+              onChangeText={(text) => this.setState({phone: text})}
+            />
+          </Body>
+        </ListItem>
+
+        <ListItem icon>
+          <Left>
+            <Button>
+              <Icon active name="transgender" />
+            </Button>
+          </Left>
+          <Body>
             <Picker
               iosHeader="Select one"
               mode="dropdown"
-              selectedValue={this.state.selected1}
-              onValueChange={this.onValueChange.bind(this)}>
-              <Item label="Male" value="key0" />
-              <Item label="Female" value="key1" />
-              <Item label="Other" value="key2" />
+              selectedValue={this.state.gender}
+              onChangeText={(text) => this.setState({gender: text})}>
+              <ListItem label="Male" value="male" />
+              <ListItem label="Female" value="female" />
+              <ListItem label="Other" value="other" />
             </Picker>
-          </Item>
-
-          <Item>
-            <Icon name="compass" />
-            <Input placeholder="Address" />
-          </Item>
-        </Form>
+          </Body>
+        </ListItem>
+        <ListItem icon>
+          <Left>
+            <Button>
+              <Icon name="compass" />
+            </Button>
+          </Left>
+          <Body>
+            <Input
+              placeholder="Address"
+              value={this.state.address}
+              onChangeText={(text) => this.setState({address: text})}
+            />
+          </Body>
+        </ListItem>
       </Content>
     );
   }

@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
   lock_button: {
     position: 'absolute',
     bottom: '5%',
-    right: '1%',
+    right: '1.9%',
     width: 70,
     height: 50,
   },

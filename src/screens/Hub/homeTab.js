@@ -6,31 +6,71 @@ import MapView from 'react-native-maps';
 import {Marker} from 'react-native-maps';
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
+import firestore from '@react-native-firebase/firestore';
 
 class HomeTab extends React.Component {
   constructor(props) {
     super(props);
     const {currentUser} = auth();
+
     this.state = {
       currentUser,
+      vehicle_id: '',
+      user_doc: {},
       region: {
-        latitude: 37.78825,
-        longitude: -122.4324,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
+        latitude: 0,
+        longitude: 0,
+        latitudeDelta: 0.5,
+        longitudeDelta: 0.5,
       },
     };
   }
 
+  componentDidMount() {
+    firestore()
+      .collection('users')
+      .doc(this.state.currentUser.uid)
+      .get()
+      .then(
+        function (doc) {
+          if (doc.exists) {
+            console.log('Document data:', doc.data());
+            this.setState({user_doc: doc.data()});
+            this.setState({vehicle_id: doc.data().car.id});
+            this.onPressFindCar();
+          } else {
+            // doc.data() will be undefined in this case
+            console.log('No such document!');
+          }
+        }.bind(this),
+      )
+      .catch(function (error) {
+        console.log('Error getting document:', error);
+      });
+  }
+
   onPressFindCar = () => {
-    this.setState({
-      region: {
-        latitude: 27.1886637,
-        longitude: 31.1697235,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      },
-    });
+    database()
+      .ref('/' + this.state.vehicle_id + '/location/')
+      .once('value')
+      .then(
+        function (snapshot) {
+          let value = snapshot.val();
+          if (value.latitude && value.longitude) {
+            this.setState({
+              region: {
+                latitude: parseFloat(value.latitude),
+                longitude: parseFloat(value.longitude),
+                latitudeDelta: 0.0422,
+                longitudeDelta: 0.0421,
+              },
+            });
+          } else {
+            // eslint-disable-next-line no-alert
+            alert('try again!');
+          }
+        }.bind(this),
+      );
   };
 
   render() {
@@ -42,25 +82,26 @@ class HomeTab extends React.Component {
         <MapView style={styles.map_view} region={this.state.region}>
           <Marker coordinate={this.state.region}>
             <Button transparent>
-              <Icon name="pin" style={styles.map_icon} />
+              <Icon
+                type={'MaterialCommunityIcons'}
+                name="google-maps"
+                style={styles.map_icon}
+              />
             </Button>
           </Marker>
         </MapView>
+
         <Button
           style={styles.lock_button}
           transparent
           onPress={() => {
             this.onPressFindCar();
           }}>
-          <Icon name="lock" style={styles.map_icon} />
-        </Button>
-        <Button
-          style={styles.locate_button}
-          transparent
-          onPress={() => {
-            this.onPressFindCar();
-          }}>
-          <Icon name="locate" style={styles.map_icon} />
+          <Icon
+            type={'MaterialIcons'}
+            name="gps-fixed"
+            style={styles.map_icon}
+          />
         </Button>
       </View>
     );
